@@ -1,7 +1,7 @@
 package br.uniesp.si.techback.controller;
-import br.uniesp.si.techback.model.Genero;
-import br.uniesp.si.techback.service.GeneroService;
-import jakarta.validation.Valid;
+
+import br.uniesp.si.techback.model.Endereco;
+import br.uniesp.si.techback.service.EnderecoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,42 +10,42 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/generos")
+@RequestMapping("/enderecos")
 @RequiredArgsConstructor
 
-public class GeneroController {
+public class EnderecoController {
 
-    private final GeneroService generoService;
+    private final EnderecoService enderecoService;
 
     @GetMapping
-    public List<Genero> listar() { return generoService.listar(); }
+    public List<Endereco> listar() {return enderecoService.listar();}
 
     @GetMapping("/{id}")
-    public ResponseEntity<Genero> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Endereco> buscarPorId(Long id) {
         try {
-            return ResponseEntity.ok(generoService.buscarPorId(id));
+            return ResponseEntity.ok(enderecoService.buscarPorId(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PostMapping
-    public ResponseEntity<Genero> criar(@Valid @RequestBody Genero genero) {
-        Genero generoSalvo = generoService.salvar(genero);
+    public ResponseEntity<Endereco> criar(Endereco endereco) {
+        Endereco enderecoSalvo = enderecoService.salvar(endereco);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(generoSalvo.getId())
+                .buildAndExpand(enderecoSalvo.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(generoSalvo);
+        return ResponseEntity.created(location).body(enderecoSalvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Genero> atualizar(@PathVariable Long id, @Valid @RequestBody Genero genero) {
+    public ResponseEntity<Endereco> atualizar(@PathVariable Long id, @RequestBody Endereco endereco) {
         try {
-            Genero generoAtualizado = generoService.atualizar(id, genero);
-            return ResponseEntity.ok(generoAtualizado);
+            Endereco enderecoAtualizado = enderecoService.atualizar(id, endereco);
+            return ResponseEntity.ok(enderecoAtualizado);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -54,7 +54,7 @@ public class GeneroController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         try {
-            generoService.excluir(id);
+            enderecoService.excluir(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

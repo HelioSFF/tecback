@@ -1,6 +1,8 @@
 package br.uniesp.si.techback.controller;
-import br.uniesp.si.techback.model.Genero;
-import br.uniesp.si.techback.service.GeneroService;
+
+
+import br.uniesp.si.techback.model.Planos;
+import br.uniesp.si.techback.service.PlanosService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,51 +12,50 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/generos")
+@RequestMapping("/planos")
 @RequiredArgsConstructor
 
-public class GeneroController {
-
-    private final GeneroService generoService;
+public class PlanosController {
+    private final PlanosService planosService;
 
     @GetMapping
-    public List<Genero> listar() { return generoService.listar(); }
+    public List<Planos> listar() {return planosService.listar();}
 
     @GetMapping("/{id}")
-    public ResponseEntity<Genero> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Planos> buscarPorId(Long id) {
         try {
-            return ResponseEntity.ok(generoService.buscarPorId(id));
+            return ResponseEntity.ok(planosService.buscarPorId(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PostMapping
-    public ResponseEntity<Genero> criar(@Valid @RequestBody Genero genero) {
-        Genero generoSalvo = generoService.salvar(genero);
+    public ResponseEntity<Planos> criar(@Valid @RequestBody Planos planos) {
+        Planos planosSalvo = planosService.salvar(planos);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(generoSalvo.getId())
+                .buildAndExpand(planosSalvo.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(generoSalvo);
+        return ResponseEntity.created(location).body(planosSalvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Genero> atualizar(@PathVariable Long id, @Valid @RequestBody Genero genero) {
+    public ResponseEntity<Planos> atualizar(@PathVariable Long id, @Valid @RequestBody Planos planos) {
         try {
-            Genero generoAtualizado = generoService.atualizar(id, genero);
-            return ResponseEntity.ok(generoAtualizado);
+            Planos planosAtualizado = planosService.atualizar(id, planos);
+            return ResponseEntity.ok(planosAtualizado);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
+
         }
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         try {
-            generoService.excluir(id);
+            planosService.excluir(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

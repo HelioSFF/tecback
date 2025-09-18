@@ -1,6 +1,8 @@
 package br.uniesp.si.techback.controller;
-import br.uniesp.si.techback.model.Genero;
-import br.uniesp.si.techback.service.GeneroService;
+
+
+import br.uniesp.si.techback.model.Favoritos;
+import br.uniesp.si.techback.service.FavoritosService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,42 +12,43 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/generos")
+@RequestMapping("/favoritos")
 @RequiredArgsConstructor
+public class FavoritosController {
 
-public class GeneroController {
-
-    private final GeneroService generoService;
+    private final FavoritosService favoritosService;
 
     @GetMapping
-    public List<Genero> listar() { return generoService.listar(); }
+    public List<Favoritos> listar() {
+        return favoritosService.listar();
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Genero> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Favoritos> buscarPorId(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(generoService.buscarPorId(id));
+            return ResponseEntity.ok(favoritosService.buscarPorId(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PostMapping
-    public ResponseEntity<Genero> criar(@Valid @RequestBody Genero genero) {
-        Genero generoSalvo = generoService.salvar(genero);
+    public ResponseEntity<Favoritos> criar(@Valid @RequestBody Favoritos favoritos) {
+        Favoritos favoritosSalvo = favoritosService.salvar(favoritos);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(generoSalvo.getId())
+                .buildAndExpand(favoritosSalvo.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(generoSalvo);
+        return ResponseEntity.created(location).body(favoritosSalvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Genero> atualizar(@PathVariable Long id, @Valid @RequestBody Genero genero) {
+    public ResponseEntity<Favoritos> atualizar(@PathVariable Long id, @Valid @RequestBody Favoritos favoritos) {
         try {
-            Genero generoAtualizado = generoService.atualizar(id, genero);
-            return ResponseEntity.ok(generoAtualizado);
+            Favoritos favoritosAtualizado = favoritosService.atualizar(id, favoritos);
+            return ResponseEntity.ok(favoritosAtualizado);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -54,7 +57,7 @@ public class GeneroController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         try {
-            generoService.excluir(id);
+            favoritosService.excluir(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
